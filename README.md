@@ -1,40 +1,30 @@
-🔗 URL Shortener
+🔗 URL Shortener – Backend
 
-A high-performance URL shortener built with FastAPI, PostgreSQL, Redis, and React.
-It allows users to shorten long URLs, redirect instantly, view analytics, and delete short links — all with enterprise-grade performance and security.
+This is the backend service for the URL Shortener application, built using FastAPI, PostgreSQL, and Redis.
+It handles URL shortening, redirection, analytics, caching, and security.
+
+🌐 Frontend Repository
+
+The frontend for this project is available here:
+👉 https://github.com/shashwat25dev/url-shortener-frontend
 
 ✨ Features
 
-🔐 Unique Short URLs
+🔐 Generate unique short URLs
 
-⚡ Redis-based Caching for ultra-fast redirects
+⚡ Redis caching for ultra-fast redirects
 
-📊 URL Analytics (click count & stats)
+📊 Click tracking and analytics
 
-🗑 Delete Short URLs
+🗑 Delete short URLs
 
-⏳ Rate Limiting
+⏳ Rate limiting
 
-🔄 Instant Redirects
+🔄 HTTP redirects
 
 🧩 RESTful API
 
-🌐 Modern React Frontend
-
-🏗️ System Architecture
-React Frontend
-     ↓
-FastAPI Backend
-     ↓
-PostgreSQL (Persistent Storage)
-     ↓
-Redis (Cache Layer)
-
-
-Redis is used to cache frequently accessed short URLs, drastically reducing database hits and improving response times.
-
 🛠 Tech Stack
-Backend
 
 FastAPI
 
@@ -46,52 +36,67 @@ SQLAlchemy
 
 Docker
 
-Frontend
-
-React
-
-TypeScript
-
-Tailwind CSS
-
 📌 API Endpoints
 Method	Endpoint	Description
 POST	/shorten	Create short URL
 GET	/{shortCode}	Redirect to original URL
-GET	/stats/{shortCode}	Get analytics
-DELETE	/delete/{shortCode}	Delete URL
-⚙️ Installation
-1️⃣ Clone the repository
-git clone https://github.com/yourusername/url-shortener.git
-cd url-shortener
+GET	/stats/{shortCode}	Get URL analytics
+DELETE	/delete/{shortCode}	Delete short URL
 
-2️⃣ Backend Setup
-cd backend
+⚙️ Setup Instructions
+1️⃣ Clone the repository
+git clone https://github.com/shashwat25dev/url-shortener-backend.git
+cd url-shortener-backend
+
+2️⃣ Create virtual environment
 python -m venv venv
 source venv/bin/activate
+
+3️⃣ Install dependencies
 pip install -r requirements.txt
 
+4️⃣ Environment Variables
 
-Create a .env file:
+Create .env file:
 
 DATABASE_URL=postgresql://username:password@localhost:5432/urlshortener
 REDIS_URL=redis://localhost:6379
 
+5️⃣ Run the server
+uvicorn main:app --reload
 
-Run:
+
+Backend runs at:
+http://localhost:8000
+
+🐳 Docker Support
+docker-compose up --build
+
+🔗 Connecting Backend to Frontend
+
+Follow these steps to connect the React frontend with this FastAPI backend.
+
+1️⃣ Run the Backend
+
+Start the backend server:
 
 uvicorn main:app --reload
 
-3️⃣ Frontend Setup
-cd frontend
-npm install
-npm run dev
+It will run at:
 
-🐳 Run using Docker
-docker-compose up --build
+http://localhost:8000
+
+2️⃣ Configure Frontend API URL
+
+In the frontend project, create or edit the .env file:
+
+VITE_API_BASE_URL=http://localhost:8000
+
+Restart the frontend after saving.
 
 
-This will start:
+
+Starts:
 
 FastAPI
 
@@ -99,30 +104,27 @@ PostgreSQL
 
 Redis
 
-React Frontend
+📈 Redis Caching Flow
 
-📈 Redis Caching Logic
-
-When a user requests a short URL
+Client requests a short URL
 
 Redis is checked first
 
-If not found → PostgreSQL is queried
+If cache miss → PostgreSQL is queried
 
-Result is cached in Redis
+URL is cached in Redis
 
-Next request hits Redis directly
-
-This makes redirects blazing fast ⚡
+Next request is served from cache
 
 🔒 Security
 
 Input validation
 
-Rate limiting
-
-SQL Injection protection
-
-Redis cache isolation
+SQL injection protection
 
 Environment-based secrets
+
+👤 Author
+
+Shashwat Dwivedi
+Full-Stack Developer
