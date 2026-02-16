@@ -9,6 +9,7 @@ from shortener import create_short_url
 from DataBase.crud import create_url, get_url, delete_url, get_stats
 from caching.redis import redis_client
 
+
 app = FastAPI()
 
 # CORS
@@ -33,6 +34,7 @@ def shorten_url(data: URLRequest, db: Session = Depends(get_db)):
     create_url(db, short_code, data.long_url)
 
     redis_client.set(short_code, data.long_url)
+    redis_client.set(f"stats:{short_code}", -1)
 
     return {
         "short_url": f"http://127.0.0.1:8000/{short_code}"
@@ -58,7 +60,7 @@ def stats(short_code: str, db: Session = Depends(get_db)):
     short_code = normalize(short_code)
 
     clicks = redis_client.get(f"stats:{short_code}")
-    if clicks:
+    if clicks!=-1:
         return {"short_code": short_code,  "clicks": int(clicks)}
 
     url = get_stats(db, short_code)
@@ -67,7 +69,7 @@ def stats(short_code: str, db: Session = Depends(get_db)):
 
     redis_client.set(f"stats:{short_code}", url.clicks)
 
-    return {"short_code": short_code, "clicks": url.clicks}
+    return {"clicks": url.clicks}
 
 
 @app.get("/health")
@@ -81,6 +83,7 @@ def redirect(short_code: str, db: Session = Depends(get_db)):
 
     url = redis_client.get(short_code)
     if url:
+        redis_client.incr(f"stats:{short_code}")
         return RedirectResponse(url)
 
     url = get_url(db, short_code)

@@ -36,6 +36,10 @@ SQLAlchemy
 
 Docker
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> da7f5bc (Fix Redis integration and normalize function)
 📌 API Endpoints
 Method	Endpoint	Description
 POST	/shorten	Create short URL
