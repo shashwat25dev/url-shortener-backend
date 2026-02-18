@@ -3,6 +3,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 from deps import get_db 
 from shortener import create_short_url
@@ -12,10 +16,13 @@ from caching.redis import redis_client
 
 app = FastAPI()
 
+frontend = os.getenv("FRONTEND_URL", "*")
+
+
 # CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[str(getenv("FRONTEND_URL"))],
+    allow_origins=[frontend],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
