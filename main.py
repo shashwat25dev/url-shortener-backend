@@ -41,7 +41,7 @@ def shorten_url(data: URLRequest, db: Session = Depends(get_db)):
     create_url(db, short_code, data.long_url)
 
     redis_client.set(short_code, data.long_url)
-    redis_client.set(f"stats:{short_code}", -1)
+    redis_client.set(f"stats:{short_code}", 0)
 
     return {
         "short_url": f"http://127.0.0.1:8000/{short_code}"

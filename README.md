@@ -54,7 +54,7 @@ cd url-shortener-backend
 
 2️⃣ Create virtual environment
 python -m venv venv
-source venv/bin/activate
+source C:\Users\Shashwat\url-shortener>
 
 3️⃣ Install dependencies
 pip install -r requirements.txt
